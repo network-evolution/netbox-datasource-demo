@@ -1,0 +1,11 @@
+---
+dns:
+  - 8.8.8.8
+  - 1.1.1.1
+ntp:
+  - 0.pool.ntp.org
+  - 1.pool.ntp.org
+  - 192.168.1.200
+snmp_community: "IN_SNMPV3"
+syslog:
+  - syslog.in.company.com
