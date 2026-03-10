@@ -16,6 +16,8 @@ class DeviceComplianceCheckBySite(Script):
     def run(self, data, commit):
 
         devices = Device.objects.filter(site__in=data["sites"])
+        output = []
+        output.append("Device Name,Site,Status,Issues")
 
         if not devices.exists():
             self.log_info("No devices found in selected site(s)")
@@ -43,14 +45,16 @@ class DeviceComplianceCheckBySite(Script):
                     f"NON-COMPLIANT | {device.name} ({device.site.name}) | "
                     f"{', '.join(issues)}"
                 )
+                output.append(f"{device.name},{device.site.name},NON-COMPLIANT,\"{'; '.join(issues)}\"")
             else:
                 compliant += 1
                 self.log_success(
                     f"COMPLIANT | {device.name} ({device.site.name})"
                 )
-
+                output.append(f"{device.name},{device.site.name},COMPLIANT,None")
         self.log_info(
             f"Summary → Total: {devices.count()}, "
             f"Compliant: {compliant}, "
             f"Non-compliant: {non_compliant}"
         )
+        return "\n".join(output)
